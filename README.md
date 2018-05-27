@@ -56,6 +56,16 @@ from wordpresspy.wordpress import CONSTANT_NAME1, CONSTANT_NAME2
 ```
 |Constant               | Value         |
 |:----------------------|:--------------|
+|POST_FORMAT_ASIDE      | 'aside'       |
+|POST_FORMAT_AUDIO      | 'audio'       |
+|POST_FORMAT_CHAT       | 'chat'        |
+|POST_FORMAT_GALLERY    | 'gallery'     |
+|POST_FORMAT_IMAGE      | 'image'       |
+|POST_FORMAT_LINK       | 'link'        |
+|POST_FORMAT_QUOTE      | 'quote'       |
+|POST_FORMAT_STANDARD   | 'standard'    |
+|POST_FORMAT_STATUS     | 'status'      |
+|POST_FORMAT_VIDEO      | 'video'       |
 |POST_STATUS_PUBLISH    | 'publish'     |
 |POST_STATUS_FUTURE     | 'future'      |
 |POST_STATUS_DRAFT      | 'draft'       |
@@ -81,7 +91,10 @@ wpapi.create_post(
 
 |Field      | Note                                                                |
 |:----------|:--------------------------------------------------------------------|
-|slug       | Default value is title to lower case, replace non-ascii chars to ascii candidate, non-repleceable special chars removed and replace white space to slash.                                         |
+|categories | Array of IDs (int). |
+|date       | String with the following format: YYYY-MM-DD HH:MM:SS |
+|slug       | Default value is title to lower case, replace non-ascii chars to ascii candidate, non-repleceable special chars removed and replace white space to slash. |
+|tags       | Array of IDs (int). |
 
 #### Update post
 ```python3

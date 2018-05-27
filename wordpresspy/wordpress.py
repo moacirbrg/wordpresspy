@@ -3,6 +3,17 @@ import json
 from .api import API
 from .utils import str_to_slug
 
+POST_FORMAT_ASIDE = 'aside'
+POST_FORMAT_AUDIO = 'audio'
+POST_FORMAT_CHAT = 'chat'
+POST_FORMAT_GALLERY = 'gallery'
+POST_FORMAT_IMAGE = 'image'
+POST_FORMAT_LINK = 'link'
+POST_FORMAT_QUOTE = 'quote'
+POST_FORMAT_STANDARD = 'standard'
+POST_FORMAT_STATUS = 'status'
+POST_FORMAT_VIDEO = 'video'
+
 POST_STATUS_PUBLISH = 'publish'
 POST_STATUS_FUTURE = 'future'
 POST_STATUS_DRAFT = 'draft'
@@ -20,10 +31,15 @@ class WordPressAPI:
     def _create_post_entity(self, **kwargs):
         return {
             'author': kwargs.get('author', 0),
+            'categories': kwargs.get('categories', []),
             'content': kwargs.get('content', ''),
+            'date': kwargs.get('date', None),
             'excerpt': kwargs.get('excerpt', ''),
+            'featured_media': kwargs.get('featured_media', 0),
+            'format': kwargs.get('format', POST_FORMAT_STANDARD),
             'slug': kwargs.get('slug', str_to_slug(kwargs.get('title'))),
             'status': kwargs.get('status', POST_STATUS_PUBLISH),
+            'tags': kwargs.get('tags', []),
             'title': kwargs.get('title')
         }
 
