@@ -1,6 +1,16 @@
 # WordPressPy
 WordPressPy is a Python library for automate management in WordPress installations including its plugins as WooCommerce.
 
+* [Installation](#installation)
+* [WordPress](#wordpress)
+  * [WordPress connnection](#wordpress-connnection)
+  * [Posts](#posts)
+    * [Create post](#create-post)
+  * [Medias](#medias)
+    * [Create media](#create-media)
+    * [Update media](#update-media)
+    
+
 ## Configuring WordPress
 For use WordPressPy you need install [Application Password](https://wordpress.org/plugins/application-passwords/), a plugin for WordPress Authentication, and configure it following their documentation page linked before.
 
@@ -10,6 +20,9 @@ pip install wordpresspy
 ```
 
 ## WordPress
+The following steps will guide you how to manage WordPress core features.
+
+### WordPress connnection
 To manage a WordPress installation you need firstly configure a connection to your WordPress.
 
 ```python3
@@ -62,7 +75,7 @@ wpapi.create_post(
 |slug       | Default value is title to lower case, replace non-ascii chars to ascii candidate, non-repleceable special chars removed and replace white space to slash.                                         |
 |title     | Title is mandatory                                                   |
 
-### Media
+### Medias
 The following methods helps you to manage medias.
 
 #### Create media
