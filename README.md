@@ -84,5 +84,22 @@ wpapi.create_media(
 ```python3
 # Upload from web
 res = urllib.request.urlopen('https://some-domain.com/some-url-to-image.extension')
-wpapi.create_media(res.read(), 'some-url-to-image.extension', fields described above...)
+wpapi.create_media(
+  res.read(),
+  'a-name-for-image.extension',
+  title='Media title',
+  caption='Media caption',
+  ...
+  )
+```
+
+#### Update media
+```python3
+media_id = 1
+wpapi.update_media(
+  media_id,
+  title='Media title',
+  caption='Media caption',
+  ...
+)
 ```
