@@ -22,8 +22,8 @@ class WordPressAPI:
             'author': kwargs.get('author', 0),
             'content': kwargs.get('content', ''),
             'excerpt': kwargs.get('excerpt', ''),
-            'status': kwargs.get('status', POST_STATUS_PUBLISH),
             'slug': kwargs.get('slug', str_to_slug(kwargs.get('title'))),
+            'status': kwargs.get('status', POST_STATUS_PUBLISH),
             'title': kwargs.get('title')
         })))
 
