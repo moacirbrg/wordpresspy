@@ -155,10 +155,10 @@ Returns a list of *Get media* result.
 ## Errors
 WordPressPy can raise the following errors:
 
-### WordPressPyError
+### WordPressError
 Error properties:
 * **reason**: Error message (string)
 * **http_status**: HTTP Status Code (int)
 ```python3
-from wordpresspy.errors import WordPressPyError
+from wordpresspy.errors import WordPressError
 ```
