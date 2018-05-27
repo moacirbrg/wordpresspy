@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='wordpresspy',
-      version='0.0.5',
+      version='0.0.6',
       long_description='Library for management WordPress and its plugins, please visit https://github.com/weecan-group/wordpresspy for documentation.',
       url='https://github.com/weecan-group/wordpresspy',
       author='Weecan',

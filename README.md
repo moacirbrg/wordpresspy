@@ -87,8 +87,13 @@ The following methods helps you to manage medias.
 For create a media you need to pass the image binary, however there are many ways to load images. Follows some examples:
 ```python3
 # Upload from your disk
+from os.path import basename
+
 path = 'path-of-images-folder/image-name.extension'
 binary = open(path, 'rb')
+
+...
+
 wpapi.create_media(
   binary,
   basename(path),
@@ -101,6 +106,10 @@ wpapi.create_media(
 
 ```python3
 # Upload from web
+import urllib.request
+
+...
+
 res = urllib.request.urlopen('https://some-domain.com/some-url-to-image.extension')
 wpapi.create_media(
   res.read(),
