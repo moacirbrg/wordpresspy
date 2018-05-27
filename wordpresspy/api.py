@@ -1,61 +1,53 @@
 import base64
-import http.client
-from os.path import basename
+import urllib.request
 
 from .http_method import HTTP_DELETE, HTTP_GET, HTTP_POST, HTTP_PUT
 
 
 class API:
-    conn = None
+    domain = None
+    port = 80
+    ssl = False
+    username = None
+    password = None
+    url_prefix = ''
 
-    def __init__(self, domain, port, username, password, url_prefix=''):
-        self.username = username
-        self.password = password
-        self.domain = domain
-        self.port = port
-        self.url_prefix = url_prefix
+    def __init__(self, **kwargs):
+        self.username = kwargs.get('username')
+        self.password = kwargs.get('password')
+        self.domain = kwargs.get('domain')
+        self.port = kwargs.get('port', self.port)
+        self.ssl = kwargs.get('ssl', self.ssl)
+        self.url_prefix = kwargs.get('url_prefix', self.url_prefix)
 
     def _get_access_token(self):
         userpass = bytearray('%s:%s' % (self.username, self.password), 'utf8')
         return base64.b64encode(userpass).decode('utf8')
 
-    def _get_connection(self):
-        if (self.conn is None):
-            self.conn = http.client.HTTPConnection(self.domain, self.port)
-        return self.conn
-
-    def _get_headers(self):
-        return {
-            'Authorization': 'Basic ' + self._get_access_token()
-        }
-
-    def _get_json_headers(self):
-        headers = self._get_headers()
-        headers['Content-type'] = 'application/json'
-        return headers
-
-    def _get_upload_headers(self, filename):
-        headers = self._get_headers()
-        headers['Content-Disposition'] = 'form-data; filename="%s"' % filename
-        return headers
-
     def _get_url(self, url):
-        return self.url_prefix + url
+        full_url = 'http://' if self.ssl is False else 'https://'
+        full_url += self.domain
+        full_url += ":" + str(self.port)
+        full_url += self.url_prefix
+        full_url += url
+        return full_url
 
     def _request(self, method, url, data=None):
-        conn = self._get_connection()
         url = self._get_url(url)
-        headers = self._get_json_headers()
-        conn.request(method, url, body=data, headers=headers)
-        return conn.getresponse().read()
+        req = urllib.request.Request(url=url, data=data, method=method)
+        req.add_header('Authorization', 'Basic ' + self._get_access_token())
+        req.add_header('Content-type', 'application/json')
+        res = urllib.request.urlopen(req)
+        return res.read()
 
-    def upload(self, url, file_binary):
-        conn = self._get_connection()
+    def upload(self, url, binary, filename):
         url = self._get_url(url)
-        headers = self._get_upload_headers(basename(file_binary.name))
-        method = HTTP_POST
-        conn.request(method, url, body=file_binary, headers=headers)
-        return conn.getresponse().read()
+        req = urllib.request.Request(url=url, data=binary, method=HTTP_POST)
+        req.add_header('Authorization', 'Basic ' + self._get_access_token())
+        req.add_header('Content-Disposition',
+                       'form-data; filename="%s"' % filename)
+        res = urllib.request.urlopen(req)
+        return res.read()
 
     def delete(self, url):
         return self._request(HTTP_DELETE, url)
@@ -64,7 +56,7 @@ class API:
         return self._request(HTTP_GET, url)
 
     def post(self, url, data):
-        return self._request(HTTP_POST, url, data)
+        return self._request(HTTP_POST, url, bytes(data, 'utf-8'))
 
     def put(self, url, data):
-        return self._request(HTTP_PUT, url, data)
+        return self._request(HTTP_PUT, url, bytes(data, 'utf-8'))
