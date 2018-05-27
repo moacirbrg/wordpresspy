@@ -1,7 +1,7 @@
 import json
 
 from .api import API
-from .utils import str_to_slug
+from .utils import create_json_without_nulls
 
 POST_FORMAT_ASIDE = 'aside'
 POST_FORMAT_AUDIO = 'audio'
@@ -30,22 +30,23 @@ class WordPressAPI:
 
     def _create_post_entity(self, **kwargs):
         return {
-            'author': kwargs.get('author', 0),
-            'categories': kwargs.get('categories', []),
-            'content': kwargs.get('content', ''),
+            'author': kwargs.get('author', None),
+            'categories': kwargs.get('categories', None),
+            'content': kwargs.get('content', None),
             'date': kwargs.get('date', None),
-            'excerpt': kwargs.get('excerpt', ''),
-            'featured_media': kwargs.get('featured_media', 0),
-            'format': kwargs.get('format', POST_FORMAT_STANDARD),
-            'slug': kwargs.get('slug', str_to_slug(kwargs.get('title'))),
-            'status': kwargs.get('status', POST_STATUS_PUBLISH),
-            'tags': kwargs.get('tags', []),
-            'title': kwargs.get('title')
+            'excerpt': kwargs.get('excerpt', None),
+            'featured_media': kwargs.get('featured_media', None),
+            'format': kwargs.get('format', None),
+            'slug': kwargs.get('slug', None),
+            'status': kwargs.get('status', None),
+            'tags': kwargs.get('tags', None),
+            'title': kwargs.get('title', None)
         }
 
     def create_post(self, **kwargs):
-        return json.loads(self.api.post('/posts',
-                          json.dumps(self._create_post_entity(**kwargs))))
+        post = self._create_post_entity(**kwargs)
+        post = create_json_without_nulls(post)
+        return json.loads(self.api.post('/posts', json.dumps(post)))
 
     def update_post(self, id, **kwargs):
         return json.loads(self.api.post('/posts/' + str(id),
@@ -60,18 +61,26 @@ class WordPressAPI:
     def list_post(self):
         return json.loads(self.api.get('/posts'))
 
+    def _create_media_entity(self, **kwargs):
+        return {
+            'alt_text': kwargs.get('alt_text', None),
+            'author': kwargs.get('author', None),
+            'caption': kwargs.get('caption', None),
+            'date': kwargs.get('date', None),
+            'description': kwargs.get('description', None),
+            'title': kwargs.get('title', None)
+        }
+
     def create_media(self, binary, filename, **kwargs):
         res = json.loads(self.api.upload('/media', binary, filename))
         self.update_media(res['id'], **kwargs)
         return res
 
     def update_media(self, id, **kwargs):
-        return json.loads(self.api.post('/media/' + str(id), json.dumps({
-            'alt_text': kwargs.get('alt_text', ''),
-            'caption': kwargs.get('caption', ''),
-            'description': kwargs.get('description', ''),
-            'title': kwargs.get('title', '')
-        })))
+        media = self._create_media_entity(**kwargs)
+        media = create_json_without_nulls(media)
+        return json.loads(self.api.post('/media/' + str(id),
+                          json.dumps(media)))
 
     def delete_media(self, id):
         return json.loads(self.api.delete('/media/' + str(id), json.dumps({

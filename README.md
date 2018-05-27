@@ -72,6 +72,10 @@ from wordpresspy.wordpress import CONSTANT_NAME1, CONSTANT_NAME2
 |POST_STATUS_PENDING    | 'pending'     |
 |POST_STATUS_PRIVATE    | 'private'     |
 
+Besides the constants you can also include some functions to help you.
+```python3
+from wordpresspy.utils import str_to_slug
+```
 
 ### Post
 The following methods helps you to manage posts.<br/>
@@ -79,11 +83,15 @@ You can find details about fields of Post Schema on https://developer.wordpress.
 
 #### Create post
 ```python3
+from wordpresspy.utils import str_to_slug
+
+...
+
 wpapi.create_post(
   author=0,
   content='My post full content',
   excerpt='My post description',
-  slug='my-post-url',
+  slug=str_to_slug('My post Title'),
   status=POST_STATUS_PUBLISH,
   title='My post Title'
 )
@@ -93,7 +101,6 @@ wpapi.create_post(
 |:----------|:--------------------------------------------------------------------|
 |categories | Array of IDs (int). |
 |date       | String with the following format: YYYY-MM-DD HH:MM:SS |
-|slug       | Default value is title to lower case, replace non-ascii chars to ascii candidate, non-repleceable special chars removed and replace white space to slash. |
 |tags       | Array of IDs (int). |
 
 #### Update post

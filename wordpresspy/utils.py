@@ -3,6 +3,14 @@ import unicodedata
 from six import string_types
 
 
+def create_json_without_nulls(json_obj):
+    final = {}
+    for prop in json_obj:
+        if json_obj[prop] is not None:
+            final[prop] = json_obj[prop]
+    return final
+
+
 def remove_special_chars(s):
     if not isinstance(s, string_types):
         return s
