@@ -89,10 +89,10 @@ For create a media you need to pass the image binary, however there are many way
 # Upload from your disk
 from os.path import basename
 
+...
+
 path = 'path-of-images-folder/image-name.extension'
 binary = open(path, 'rb')
-
-...
 
 wpapi.create_media(
   binary,
