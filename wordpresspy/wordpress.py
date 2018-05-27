@@ -17,20 +17,45 @@ class WordPressAPI:
         kwargs['url_prefix'] = '/wp-json/wp/v2'
         self.api = API(**kwargs)
 
-    def create_post(self, **kwargs):
-        return json.loads(self.api.post('/posts', json.dumps({
+    def _create_post_entity(self, **kwargs):
+        return {
             'author': kwargs.get('author', 0),
             'content': kwargs.get('content', ''),
             'excerpt': kwargs.get('excerpt', ''),
             'slug': kwargs.get('slug', str_to_slug(kwargs.get('title'))),
             'status': kwargs.get('status', POST_STATUS_PUBLISH),
             'title': kwargs.get('title')
-        })))
+        }
+
+    def create_post(self, **kwargs):
+        return json.loads(self.api.post('/posts',
+                          json.dumps(self._create_post_entity(**kwargs))))
+
+    def update_post(self, id, **kwargs):
+        return json.loads(self.api.post('/posts/' + str(id),
+                          json.dumps(self._create_post_entity(**kwargs))))
+
+    def delete_post(self, id):
+        return json.loads(self.api.delete('/posts/' + str(id)))
+
+    def get_post(self, id):
+        return json.loads(self.api.get('/posts/' + str(id)))
+
+    def list_post(self):
+        return json.loads(self.api.get('/posts'))
 
     def create_media(self, binary, filename, **kwargs):
         res = json.loads(self.api.upload('/media', binary, filename))
         self.update_media(res['id'], **kwargs)
         return res
+
+    def update_media(self, id, **kwargs):
+        return json.loads(self.api.post('/media/' + str(id), json.dumps({
+            'alt_text': kwargs.get('alt_text', ''),
+            'caption': kwargs.get('caption', ''),
+            'description': kwargs.get('description', ''),
+            'title': kwargs.get('title', '')
+        })))
 
     def delete_media(self, id):
         return json.loads(self.api.delete('/media/' + str(id), json.dumps({
@@ -42,11 +67,3 @@ class WordPressAPI:
 
     def list_media(self):
         return json.loads(self.api.get('/media'))
-
-    def update_media(self, id, **kwargs):
-        return json.loads(self.api.post('/media/' + str(id), json.dumps({
-            'alt_text': kwargs.get('alt_text', ''),
-            'caption': kwargs.get('caption', ''),
-            'description': kwargs.get('description', ''),
-            'title': kwargs.get('title', '')
-        })))

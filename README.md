@@ -6,6 +6,10 @@ WordPressPy is a Python library for automate management in WordPress installatio
   * [WordPress connnection](#wordpress-connnection)
   * [Posts](#posts)
     * [Create post](#create-post)
+    * [Update post](#update-post)
+    * [Delete post](#delete-post)
+    * [Get post](#get-post)
+    * [List post](#list-post)
   * [Medias](#medias)
     * [Create media](#create-media)
     * [Update media](#update-media)
@@ -60,7 +64,8 @@ from wordpresspy.wordpress import CONSTANT_NAME1, CONSTANT_NAME2
 
 
 ### Posts
-The following methods helps you to manage posts.
+The following methods helps you to manage posts.<br/>
+You can find details about fields of Post Schema on https://developer.wordpress.org/rest-api/reference/posts/#schema
 
 #### Create post
 ```python3
@@ -76,12 +81,43 @@ wpapi.create_post(
 
 |Field      | Note                                                                |
 |:----------|:--------------------------------------------------------------------|
-|author     | Author ID                                                           |
 |slug       | Default value is title to lower case, replace non-ascii chars to ascii candidate, non-repleceable special chars removed and replace white space to slash.                                         |
-|title     | Title is mandatory                                                   |
+
+#### Update post
+```python3
+post_id = 1
+wpapi.update_post(
+  post_id,
+  content='My post full content',
+  title='My post Title',
+  ...
+)
+```
+
+#### Delete post
+```python3
+post_id = 1
+wpapi.delete_post(post_id)
+```
+
+#### Get post
+```python3
+post_id = 1
+post = wpapi.get_post(post_id)
+```
+
+Returns one [Post Schema](#post).
+
+#### List post
+```python3
+posts = wpapi.list_post()
+```
+
+Returns a list of [Post Schema](#post).
 
 ### Medias
-The following methods helps you to manage medias.
+The following methods helps you to manage medias.<br/>
+You can find details about fields of Media Schema on https://developer.wordpress.org/rest-api/reference/posts/#schema
 
 #### Create media
 For create a media you need to pass the image binary, however there are many ways to load images. Follows some examples:
@@ -140,17 +176,17 @@ wpapi.delete_media(media_id)
 #### Get media
 ```python3
 media_id = 1
-wpapi.get_media(media_id)
+media = wpapi.get_media(media_id)
 ```
 
-Returns a parsed JSON from WordPress REST API.
+Returns one [Media Schema](#media).
 
 #### List media
 ```python3
-wpapi.list_media()
+medias = wpapi.list_media()
 ```
 
-Returns a list of *Get media* result.
+Returns a list of [Media Schema](#media).
 
 ## Errors
 WordPressPy can raise the following errors:
