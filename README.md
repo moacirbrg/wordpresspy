@@ -9,6 +9,11 @@ WordPressPy is a Python library for automate management in WordPress installatio
   * [Medias](#medias)
     * [Create media](#create-media)
     * [Update media](#update-media)
+    * [Delete media](#update-media)
+    * [Get media](#get-media)
+    * [List media](#list-media)
+* [Errors](#errors)
+  * [WordPressPyError](#wordpresspyerror)
     
 
 ## Configuring WordPress
@@ -115,4 +120,36 @@ wpapi.update_media(
   caption='Media caption',
   ...
 )
+```
+
+#### Delete media
+```python3
+media_id = 1
+wpapi.delete_media(media_id)
+```
+
+#### Get media
+```python3
+media_id = 1
+wpapi.get_media(media_id)
+```
+
+Returns a parsed JSON from WordPress REST API.
+
+#### List media
+```python3
+wpapi.list_media()
+```
+
+Returns a list of *Get media* result.
+
+## Errors
+WordPressPy can raise the following errors:
+
+### WordPressPyError
+Error properties:
+* **reason**: Error message (string)
+* **http_status**: HTTP Status Code (int)
+```python3
+from wordpresspy.errors import WordPressPyError
 ```

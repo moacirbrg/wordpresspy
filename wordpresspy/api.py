@@ -1,6 +1,8 @@
 import base64
 import urllib.request
+import json
 
+from .errors import WordPressError
 from .http_method import HTTP_DELETE, HTTP_GET, HTTP_POST, HTTP_PUT
 
 
@@ -33,12 +35,21 @@ class API:
         return full_url
 
     def _request(self, method, url, data=None):
-        url = self._get_url(url)
-        req = urllib.request.Request(url=url, data=data, method=method)
+        try:
+            url = self._get_url(url)
+            req = urllib.request.Request(url=url, data=data, method=method)
+            self._set_authorization_header(req)
+            self._set_json_header(req)
+            res = urllib.request.urlopen(req)
+            return res.read()
+        except urllib.error.HTTPError as e:
+            raise WordPressError(e.reason, e.code)
+
+    def _set_authorization_header(self, req):
         req.add_header('Authorization', 'Basic ' + self._get_access_token())
+
+    def _set_json_header(self, req):
         req.add_header('Content-type', 'application/json')
-        res = urllib.request.urlopen(req)
-        return res.read()
 
     def upload(self, url, binary, filename):
         url = self._get_url(url)
@@ -49,8 +60,10 @@ class API:
         res = urllib.request.urlopen(req)
         return res.read()
 
-    def delete(self, url):
-        return self._request(HTTP_DELETE, url)
+    def delete(self, url, data=None):
+        if data is not None:
+            data = bytes(data, 'utf-8')
+        return self._request(HTTP_DELETE, url, data)
 
     def get(self, url):
         return self._request(HTTP_GET, url)

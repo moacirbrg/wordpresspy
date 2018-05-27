@@ -32,6 +32,17 @@ class WordPressAPI:
         self.update_media(res['id'], **kwargs)
         return res
 
+    def delete_media(self, id):
+        return json.loads(self.api.delete('/media/' + str(id), json.dumps({
+            'force': True
+        })))
+
+    def get_media(self, id):
+        return json.loads(self.api.get('/media/' + str(id)))
+
+    def list_media(self):
+        return json.loads(self.api.get('/media'))
+
     def update_media(self, id, **kwargs):
         return json.loads(self.api.post('/media/' + str(id), json.dumps({
             'alt_text': kwargs.get('alt_text', ''),
