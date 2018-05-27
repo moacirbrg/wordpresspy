@@ -4,13 +4,13 @@ WordPressPy is a Python library for automate management in WordPress installatio
 * [Installation](#installation)
 * [WordPress](#wordpress)
   * [WordPress connnection](#wordpress-connnection)
-  * [Posts](#posts)
+  * [Post](#post)
     * [Create post](#create-post)
     * [Update post](#update-post)
     * [Delete post](#delete-post)
     * [Get post](#get-post)
     * [List post](#list-post)
-  * [Medias](#medias)
+  * [Media](#media)
     * [Create media](#create-media)
     * [Update media](#update-media)
     * [Delete media](#update-media)
@@ -63,7 +63,7 @@ from wordpresspy.wordpress import CONSTANT_NAME1, CONSTANT_NAME2
 |POST_STATUS_PRIVATE    | 'private'     |
 
 
-### Posts
+### Post
 The following methods helps you to manage posts.<br/>
 You can find details about fields of Post Schema on https://developer.wordpress.org/rest-api/reference/posts/#schema
 
@@ -115,7 +115,7 @@ posts = wpapi.list_post()
 
 Returns a list of [Post Schema](#post).
 
-### Medias
+### Media
 The following methods helps you to manage medias.<br/>
 You can find details about fields of Media Schema on https://developer.wordpress.org/rest-api/reference/posts/#schema
 
