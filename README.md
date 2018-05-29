@@ -4,18 +4,24 @@ WordPressPy is a Python library for automate management in WordPress installatio
 * [Installation](#installation)
 * [WordPress](#wordpress)
   * [WordPress connnection](#wordpress-connnection)
-  * [Post](#post)
-    * [Create post](#create-post)
-    * [Update post](#update-post)
-    * [Delete post](#delete-post)
-    * [Get post](#get-post)
-    * [List post](#list-post)
+  * [Category](#post)
+    * [Create category](#create-category)
+    * [Update category](#update-category)
+    * [Delete category](#delete-category)
+    * [Get category](#get-category)
+    * [Get categories](#list-categories)
   * [Media](#media)
     * [Create media](#create-media)
     * [Update media](#update-media)
     * [Delete media](#update-media)
     * [Get media](#get-media)
-    * [List media](#list-media)
+    * [Get medias](#get-medias)
+  * [Post](#post)
+    * [Create post](#create-post)
+    * [Update post](#update-post)
+    * [Delete post](#delete-post)
+    * [Get post](#get-post)
+    * [Get posts](#list-posts)
 * [Errors](#errors)
   * [WordPressPyError](#wordpresspyerror)
     
@@ -77,67 +83,55 @@ Besides the constants you can also include some functions to help you.
 from wordpresspy.utils import str_to_slug
 ```
 
-### Post
-The following methods helps you to manage posts.<br/>
-You can find details about fields of Post Schema on https://developer.wordpress.org/rest-api/reference/posts/#schema
+### Category
+The following methods helps you to manage categories.<br/>
+You can find details about fields of Category Schema on https://developer.wordpress.org/rest-api/reference/categories/#schema
 
-#### Create post
+#### Create category
 ```python3
 from wordpresspy.utils import str_to_slug
 
 ...
 
-wpapi.create_post(
-  author=0,
-  content='My post full content',
-  excerpt='My post description',
-  slug=str_to_slug('My post Title'),
-  status=POST_STATUS_PUBLISH,
-  title='My post Title'
+wpapi.create_category(
+  description='HTML description of the term',
+  name='HTML title for the term',
+  slug=str_to_slug('An unique alphanumeric identifier for the term'),
+  parent=0
 )
 ```
 
-|Field      | Note                                                                |
-|:----------|:--------------------------------------------------------------------|
-|categories | Array of IDs (int). |
-|date       | String with the following format: YYYY-MM-DD HH:MM:SS |
-|tags       | Array of IDs (int). |
-
-#### Update post
+#### Update category
 ```python3
-post_id = 1
-wpapi.update_post(
-  post_id,
-  content='My post full content',
-  title='My post Title',
-  ...
+category_id = 1
+wpapi.update_category(
+  category_id,
+  parent=16
 )
 ```
 
-#### Delete post
+#### Delete category
 ```python3
-post_id = 1
-wpapi.delete_post(post_id)
+category_id = 18
+wpapi.delete_category(category_id)
 ```
 
-#### Get post
+#### Get category
 ```python3
-post_id = 1
-post = wpapi.get_post(post_id)
+category_id = 18
+category = wpapi.get_category(category_id)
+print(category)
 ```
 
-Returns one [Post Schema](#post).
-
-#### List post
+#### Get categories
 ```python3
-posts = wpapi.list_post()
+categories = wpapi.get_categories()
+print(categories)
 ```
-
-Returns a list of [Post Schema](#post).
 
 ### Media
 The following methods helps you to manage medias.<br/>
-You can find details about fields of Media Schema on https://developer.wordpress.org/rest-api/reference/posts/#schema
+You can find details about fields of Media Schema on https://developer.wordpress.org/rest-api/reference/media/#schema
 
 #### Create media
 For create a media you need to pass the image binary, however there are many ways to load images. Follows some examples:
@@ -197,16 +191,78 @@ wpapi.delete_media(media_id)
 ```python3
 media_id = 1
 media = wpapi.get_media(media_id)
+print(media)
 ```
 
 Returns one [Media Schema](#media).
 
-#### List media
+#### Get medias
 ```python3
-medias = wpapi.list_media()
+medias = wpapi.get_medias()
+print(medias)
 ```
 
 Returns a list of [Media Schema](#media).
+
+### Post
+The following methods helps you to manage posts.<br/>
+You can find details about fields of Post Schema on https://developer.wordpress.org/rest-api/reference/posts/#schema
+
+#### Create post
+```python3
+from wordpresspy.utils import str_to_slug
+
+...
+
+wpapi.create_post(
+  author=0,
+  content='My post full content',
+  excerpt='My post description',
+  slug=str_to_slug('My post Title'),
+  status=POST_STATUS_PUBLISH,
+  title='My post Title'
+)
+```
+
+|Field      | Note                                                                |
+|:----------|:--------------------------------------------------------------------|
+|categories | Array of IDs (int). |
+|date       | String with the following format: YYYY-MM-DD HH:MM:SS |
+|tags       | Array of IDs (int). |
+
+#### Update post
+```python3
+post_id = 1
+wpapi.update_post(
+  post_id,
+  content='My post full content',
+  title='My post Title',
+  ...
+)
+```
+
+#### Delete post
+```python3
+post_id = 1
+wpapi.delete_post(post_id)
+```
+
+#### Get post
+```python3
+post_id = 1
+post = wpapi.get_post(post_id)
+print(post)
+```
+
+Returns one [Post Schema](#post).
+
+#### Get posts
+```python3
+posts = wpapi.gete_posts()
+print(posts)
+```
+
+Returns a list of [Post Schema](#post).
 
 ## Errors
 WordPressPy can raise the following errors:
