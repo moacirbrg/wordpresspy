@@ -264,6 +264,51 @@ print(posts)
 
 Returns a list of [Post Schema](#post).
 
+### Category
+The following methods helps you to manage tags.<br/>
+You can find details about fields of Tag Schema on https://developer.wordpress.org/rest-api/reference/tags/#schema
+
+#### Create tag
+```python3
+from wordpresspy.utils import str_to_slug
+
+...
+
+wpapi.create_tag(
+  description='Tag description',
+  name='Tag title',
+  slug=str_to_slug('Tag title'),
+)
+```
+
+#### Update tag
+```python3
+tag_id = 22
+wpapi.update_tag(
+  tag_id,
+  name='New name'
+)
+```
+
+#### Delete tag
+```python3
+tag_id = 23
+wpapi.delete_tag(tag_id)
+```
+
+#### Get tag
+```python3
+tag_id = 24
+tag_id = wpapi.get_tag(tag_id)
+print(tag_id)
+```
+
+#### Get tags
+```python3
+tags = wpapi.get_tags()
+print(tags)
+```
+
 ## Errors
 WordPressPy can raise the following errors:
 

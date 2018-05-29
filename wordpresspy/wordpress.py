@@ -37,9 +37,9 @@ class WordPressAPI:
         }
 
     def create_category(self, **kwargs):
-        post = self._create_category_entity(**kwargs)
-        post = create_json_without_nulls(post)
-        return json.loads(self.api.post('/categories', json.dumps(post)))
+        category = self._create_category_entity(**kwargs)
+        category = create_json_without_nulls(category)
+        return json.loads(self.api.post('/categories', json.dumps(category)))
 
     def update_category(self, id, **kwargs):
         category = self._create_category_entity(**kwargs)
@@ -88,7 +88,7 @@ class WordPressAPI:
 
     def get_medias(self):
         return json.loads(self.api.get('/media'))
-    
+
     def _create_post_entity(self, **kwargs):
         return {
             'author': kwargs.get('author', None),
@@ -123,3 +123,31 @@ class WordPressAPI:
 
     def get_posts(self):
         return json.loads(self.api.get('/posts'))
+
+    def _create_tag_entity(self, **kwargs):
+        return {
+            'description': kwargs.get('description', None),
+            'name': kwargs.get('name', None),
+            'slug': kwargs.get('slug', None)
+        }
+
+    def create_tag(self, **kwargs):
+        tag = self._create_tag_entity(**kwargs)
+        tag = create_json_without_nulls(tag)
+        return json.loads(self.api.post('/tags', json.dumps(tag)))
+
+    def update_tag(self, id, **kwargs):
+        tag = self._create_tag_entity(**kwargs)
+        tag = create_json_without_nulls(tag)
+        return json.loads(self.api.post('/tags/' + str(id),
+                          json.dumps(tag)))
+
+    def delete_tag(self, id):
+        return json.loads(self.api.delete('/tags/' + str(id),
+                          json.dumps({'force': True})))
+
+    def get_tag(self, id):
+        return json.loads(self.api.get('/tags/' + str(id)))
+
+    def get_tags(self):
+        return json.loads(self.api.get('/tags'))
