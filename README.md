@@ -4,7 +4,7 @@ WordPressPy is a Python library for automate management in WordPress installatio
 * [Installation](#installation)
 * [WordPress](#wordpress)
   * [WordPress connnection](#wordpress-connnection)
-  * [Category](#post)
+  * [Category](#category)
     * [Create category](#create-category)
     * [Update category](#update-category)
     * [Delete category](#delete-category)
@@ -22,6 +22,12 @@ WordPressPy is a Python library for automate management in WordPress installatio
     * [Delete post](#delete-post)
     * [Get post](#get-post)
     * [Get posts](#get-posts)
+  * [Tag](#tag)
+    * [Create tag](#create-tag)
+    * [Update tag](#update-tag)
+    * [Delete tag](#delete-tag)
+    * [Get tag](#get-tag)
+    * [Get tags](#get-tags)
 * [Errors](#errors)
   * [WordPressPyError](#wordpresspyerror)
     
@@ -264,7 +270,7 @@ print(posts)
 
 Returns a list of [Post Schema](#post).
 
-### Category
+### Tag
 The following methods helps you to manage tags.<br/>
 You can find details about fields of Tag Schema on https://developer.wordpress.org/rest-api/reference/tags/#schema
 
