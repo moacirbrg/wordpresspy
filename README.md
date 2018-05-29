@@ -9,7 +9,7 @@ WordPressPy is a Python library for automate management in WordPress installatio
     * [Update category](#update-category)
     * [Delete category](#delete-category)
     * [Get category](#get-category)
-    * [Get categories](#list-categories)
+    * [Get categories](#get-categories)
   * [Media](#media)
     * [Create media](#create-media)
     * [Update media](#update-media)
@@ -21,7 +21,7 @@ WordPressPy is a Python library for automate management in WordPress installatio
     * [Update post](#update-post)
     * [Delete post](#delete-post)
     * [Get post](#get-post)
-    * [Get posts](#list-posts)
+    * [Get posts](#get-posts)
 * [Errors](#errors)
   * [WordPressPyError](#wordpresspyerror)
     
