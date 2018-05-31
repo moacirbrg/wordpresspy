@@ -22,6 +22,9 @@ WordPressPy is a Python library for automate management in WordPress installatio
     * [Delete post](#delete-post)
     * [Get post](#get-post)
     * [Get posts](#get-posts)
+  * [Post revisions](#post-revisions)
+    * [Delete post revision](#delete-post-revision)
+    * [Get post revisions](#get-post-revisions)
   * [Tag](#tag)
     * [Create tag](#create-tag)
     * [Update tag](#update-tag)
@@ -29,7 +32,7 @@ WordPressPy is a Python library for automate management in WordPress installatio
     * [Get tag](#get-tag)
     * [Get tags](#get-tags)
 * [Errors](#errors)
-  * [WordPressPyError](#wordpresspyerror)
+  * [WordPressError](#wordpresserror)
     
 
 ## Configuring WordPress
@@ -270,6 +273,24 @@ print(posts)
 
 Returns a list of [Post Schema](#post).
 
+### Post revisions
+The following methods helps you to manage post revisions.<br/>
+You can find details about fields of Post Revisions Schema on https://developer.wordpress.org/rest-api/reference/post-revisions/#schema
+
+#### Delete post revision
+```python3
+post_id = 89
+revision_id = 95
+wpapi.delete_post_revision(post_id, revision_id)
+```
+
+#### Get post revisions
+```python3
+post_id = 89
+revisions = wpapi.get_post_revisions(post_id)
+print(revisions)
+```
+
 ### Tag
 The following methods helps you to manage tags.<br/>
 You can find details about fields of Tag Schema on https://developer.wordpress.org/rest-api/reference/tags/#schema
@@ -305,8 +326,8 @@ wpapi.delete_tag(tag_id)
 #### Get tag
 ```python3
 tag_id = 24
-tag_id = wpapi.get_tag(tag_id)
-print(tag_id)
+tag = wpapi.get_tag(tag_id)
+print(tag)
 ```
 
 #### Get tags

@@ -124,6 +124,13 @@ class WordPressAPI:
     def get_posts(self):
         return json.loads(self.api.get('/posts'))
 
+    def get_post_revisions(self, id):
+        return json.loads(self.api.get('/posts/' + str(id) + '/revisions'))
+
+    def delete_post_revision(self, post_id, revision_id):
+        url = '/posts/' + str(post_id) + '/revisions/' + str(revision_id)
+        return json.loads(self.api.delete(url, json.dumps({'force': True})))
+
     def _create_tag_entity(self, **kwargs):
         return {
             'description': kwargs.get('description', None),
