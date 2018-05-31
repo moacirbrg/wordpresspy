@@ -108,21 +108,23 @@ from wordpresspy.utils import str_to_slug
 
 ...
 
-wpapi.create_category(
+result = wpapi.create_category(
   description='HTML description of the term',
   name='HTML title for the term',
-  slug=str_to_slug('An unique alphanumeric identifier for the term'),
-  parent=0
+  parent=0,
+  slug=str_to_slug('An unique alphanumeric identifier for the term')
 )
+print(result)
 ```
 
 #### Update category
 ```python3
-category_id = 1
-wpapi.update_category(
+category_id = 28
+result = wpapi.update_category(
   category_id,
-  parent=16
+  parent=1
 )
+print(result)
 ```
 
 #### Delete category
@@ -159,7 +161,7 @@ from os.path import basename
 path = 'path-of-images-folder/image-name.extension'
 binary = open(path, 'rb')
 
-wpapi.create_media(
+result = wpapi.create_media(
   binary,
   basename(path),
   title='Media title',
@@ -167,6 +169,7 @@ wpapi.create_media(
   description='Media description',
   alt_text='Media alternative text'
 )
+print(result)
 ```
 
 ```python3
@@ -176,22 +179,24 @@ import urllib.request
 ...
 
 res = urllib.request.urlopen('https://some-domain.com/some-url-to-image.extension')
-wpapi.create_media(
+result = wpapi.create_media(
   res.read(),
   'a-name-for-image.extension',
   title='Media title',
   caption='Media caption'
   )
+print(result)
 ```
 
 #### Update media
 ```python3
-media_id = 1
-wpapi.update_media(
+media_id = 107
+result = wpapi.update_media(
   media_id,
-  title='Media title',
-  caption='Media caption'
+  title='New media title',
+  caption='New media caption'
 )
+print(result)
 ```
 
 #### Delete media
@@ -228,7 +233,7 @@ from wordpresspy.wordpress import STATUS_PUBLISH
 
 ...
 
-wpapi.create_page(
+result = wpapi.create_page(
   author=0,
   content='Page full content',
   date='2018-01-10 00:30:00',
@@ -241,15 +246,17 @@ wpapi.create_page(
   template='template-homepage.php',
   title='An amazing page title'
 )
+print(result)
 ```
 
 #### Update page
 ```python3
 page_id = 105
-wpapi.update_page(
+result = wpapi.update_page(
   page_id,
   content='New full content'
 )
+print(result)
 ```
 
 #### Delete page
@@ -286,14 +293,15 @@ from wordpresspy.wordpress import STATUS_PUBLISH
 
 ...
 
-wpapi.create_post(
+result = wpapi.create_post(
   author=0,
-  content='My post full content',
-  excerpt='My post description',
-  slug=str_to_slug('My post Title'),
+  content='Post full content',
+  excerpt='Post description',
+  slug=str_to_slug('Post slug of title'),
   status=STATUS_PUBLISH,
-  title='My post Title'
+  title='Post Title'
 )
+print(result)
 ```
 
 |Field      | Note                                                                |
@@ -304,12 +312,17 @@ wpapi.create_post(
 
 #### Update post
 ```python3
-post_id = 1
-wpapi.update_post(
-  post_id,
-  content='My post full content',
-  title='My post Title'
+post_id = 110
+result = wpapi.update_post(
+    post_id,
+    categories=[29],
+    tags=[25],
+    date='2018-01-26 00:00:00',
+    title='Title changed',
+    slug='new-slug',
+    content='New content'
 )
+print(result)
 ```
 
 #### Delete post
@@ -363,20 +376,22 @@ from wordpresspy.utils import str_to_slug
 
 ...
 
-wpapi.create_tag(
+result = wpapi.create_tag(
   description='Tag description',
   name='Tag title',
   slug=str_to_slug('Tag title'),
 )
+print(result)
 ```
 
 #### Update tag
 ```python3
-tag_id = 22
-wpapi.update_tag(
+tag_id = 30
+result = wpapi.update_tag(
   tag_id,
   name='New name'
 )
+print(result)
 ```
 
 #### Delete tag

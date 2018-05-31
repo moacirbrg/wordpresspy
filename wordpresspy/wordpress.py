@@ -36,27 +36,6 @@ class WordPressAPI:
             'parent': kwargs.get('parent', None)
         }
 
-    def create_category(self, **kwargs):
-        category = self._create_category_entity(**kwargs)
-        category = create_json_without_nulls(category)
-        return json.loads(self.api.post('/categories', json.dumps(category)))
-
-    def update_category(self, id, **kwargs):
-        category = self._create_category_entity(**kwargs)
-        category = create_json_without_nulls(category)
-        return json.loads(self.api.post('/categories/' + str(id),
-                          json.dumps(category)))
-
-    def delete_category(self, id):
-        return json.loads(self.api.delete('/categories/' + str(id),
-                          json.dumps({'force': True})))
-
-    def get_category(self, id):
-        return json.loads(self.api.get('/categories/' + str(id)))
-
-    def get_categories(self):
-        return json.loads(self.api.get('/categories'))
-
     def _create_media_entity(self, **kwargs):
         return {
             'alt_text': kwargs.get('alt_text', None),
@@ -66,28 +45,6 @@ class WordPressAPI:
             'description': kwargs.get('description', None),
             'title': kwargs.get('title', None)
         }
-
-    def create_media(self, binary, filename, **kwargs):
-        res = json.loads(self.api.upload('/media', binary, filename))
-        self.update_media(res['id'], **kwargs)
-        return res
-
-    def update_media(self, id, **kwargs):
-        media = self._create_media_entity(**kwargs)
-        media = create_json_without_nulls(media)
-        return json.loads(self.api.post('/media/' + str(id),
-                          json.dumps(media)))
-
-    def delete_media(self, id):
-        return json.loads(self.api.delete('/media/' + str(id), json.dumps({
-            'force': True
-        })))
-
-    def get_media(self, id):
-        return json.loads(self.api.get('/media/' + str(id)))
-
-    def get_medias(self):
-        return json.loads(self.api.get('/media'))
 
     def _create_page_entity(self, **kwargs):
         return {
@@ -106,26 +63,6 @@ class WordPressAPI:
             'title': kwargs.get('title', None)
         }
 
-    def create_page(self, **kwargs):
-        page = self._create_page_entity(**kwargs)
-        page = create_json_without_nulls(page)
-        return json.loads(self.api.post('/pages', json.dumps(page)))
-
-    def update_page(self, id, **kwargs):
-        page = self._create_page_entity(**kwargs)
-        page = create_json_without_nulls(page)
-        return json.loads(self.api.post('/pages/' + str(id),
-                          json.dumps(page)))
-
-    def delete_page(self, id):
-        return json.loads(self.api.delete('/pages/' + str(id)))
-
-    def get_page(self, id):
-        return json.loads(self.api.get('/pages/' + str(id)))
-
-    def get_pages(self):
-        return json.loads(self.api.get('/pages'))
-
     def _create_post_entity(self, **kwargs):
         return {
             'author': kwargs.get('author', None),
@@ -141,33 +78,6 @@ class WordPressAPI:
             'title': kwargs.get('title', None)
         }
 
-    def create_post(self, **kwargs):
-        post = self._create_post_entity(**kwargs)
-        post = create_json_without_nulls(post)
-        return json.loads(self.api.post('/posts', json.dumps(post)))
-
-    def update_post(self, id, **kwargs):
-        post = self._create_post_entity(**kwargs)
-        post = create_json_without_nulls(post)
-        return json.loads(self.api.post('/posts/' + str(id),
-                          json.dumps(post)))
-
-    def delete_post(self, id):
-        return json.loads(self.api.delete('/posts/' + str(id)))
-
-    def get_post(self, id):
-        return json.loads(self.api.get('/posts/' + str(id)))
-
-    def get_posts(self):
-        return json.loads(self.api.get('/posts'))
-
-    def get_post_revisions(self, id):
-        return json.loads(self.api.get('/posts/' + str(id) + '/revisions'))
-
-    def delete_post_revision(self, post_id, revision_id):
-        url = '/posts/' + str(post_id) + '/revisions/' + str(revision_id)
-        return json.loads(self.api.delete(url, json.dumps({'force': True})))
-
     def _create_tag_entity(self, **kwargs):
         return {
             'description': kwargs.get('description', None),
@@ -175,23 +85,111 @@ class WordPressAPI:
             'slug': kwargs.get('slug', None)
         }
 
+    def _save_entity(self, url, entity):
+        entity = create_json_without_nulls(entity)
+        return json.loads(self.api.post(url, json.dumps(entity)))
+
+    def _delete_entity(self, url, force=False):
+        force_param = None if force is False else json.dumps({'force': True})
+        return json.loads(self.api.delete(url, force_param))
+
+    def _get_entity(self, url):
+        return json.loads(self.api.get(url))
+
+    def _get_entities(self, url):
+        return json.loads(self.api.get(url))
+
+    def create_category(self, **kwargs):
+        entity = self._create_category_entity(**kwargs)
+        return self._save_entity('/categories', entity)
+
+    def update_category(self, id, **kwargs):
+        entity = self._create_category_entity(**kwargs)
+        return self._save_entity('/categories/' + str(id), entity)
+
+    def delete_category(self, id):
+        return self._delete_entity('/categories/' + str(id), True)
+
+    def get_category(self, id):
+        return self._get_entity('/categories/' + str(id))
+
+    def get_categories(self):
+        return self._get_entities('/categories')
+
+    def create_media(self, binary, filename, **kwargs):
+        res = json.loads(self.api.upload('/media', binary, filename))
+        self.update_media(res['id'], **kwargs)
+        return res
+
+    def update_media(self, id, **kwargs):
+        media = self._create_media_entity(**kwargs)
+        media = create_json_without_nulls(media)
+        return json.loads(self.api.post('/media/' + str(id),
+                          json.dumps(media)))
+
+    def delete_media(self, id):
+        return self._delete_entity('/media/' + str(id), True)
+
+    def get_media(self, id):
+        return self._get_entity('/media/' + str(id))
+
+    def get_medias(self):
+        return self._get_entities('/media')
+
+    def create_page(self, **kwargs):
+        entity = self._create_page_entity(**kwargs)
+        return self._save_entity('/pages', entity)
+
+    def update_page(self, id, **kwargs):
+        entity = self._create_page_entity(**kwargs)
+        return self._save_entity('/pages/' + str(id), entity)
+
+    def delete_page(self, id):
+        return self._delete_entity('/pages/' + str(id))
+
+    def get_page(self, id):
+        return self._get_entity('/pages/' + str(id))
+
+    def get_pages(self):
+        return self._get_entities('/pages')
+
+    def create_post(self, **kwargs):
+        entity = self._create_post_entity(**kwargs)
+        return self._save_entity('/posts', entity)
+
+    def update_post(self, id, **kwargs):
+        entity = self._create_post_entity(**kwargs)
+        return self._save_entity('/posts/' + str(id), entity)
+
+    def delete_post(self, id):
+        return self._delete_entity('/posts/' + str(id))
+
+    def get_post(self, id):
+        return self._get_entity('/posts/' + str(id))
+
+    def get_posts(self):
+        return self._get_entities('/posts')
+
+    def get_post_revisions(self, id):
+        return self._get_entities('/posts/' + str(id) + '/revisions')
+
+    def delete_post_revision(self, post_id, revision_id):
+        url = '/posts/' + str(post_id) + '/revisions/' + str(revision_id)
+        return self._delete_entity(url, True)
+
     def create_tag(self, **kwargs):
-        tag = self._create_tag_entity(**kwargs)
-        tag = create_json_without_nulls(tag)
-        return json.loads(self.api.post('/tags', json.dumps(tag)))
+        entity = self._create_tag_entity(**kwargs)
+        return self._save_entity('/tags', entity)
 
     def update_tag(self, id, **kwargs):
-        tag = self._create_tag_entity(**kwargs)
-        tag = create_json_without_nulls(tag)
-        return json.loads(self.api.post('/tags/' + str(id),
-                          json.dumps(tag)))
+        entity = self._create_tag_entity(**kwargs)
+        return self._save_entity('/tags/' + str(id), entity)
 
     def delete_tag(self, id):
-        return json.loads(self.api.delete('/tags/' + str(id),
-                          json.dumps({'force': True})))
+        return self._delete_entity('/tags/' + str(id), True)
 
     def get_tag(self, id):
-        return json.loads(self.api.get('/tags/' + str(id)))
+        return self._get_entity('/tags/' + str(id))
 
     def get_tags(self):
-        return json.loads(self.api.get('/tags'))
+        return self._get_entities('/tags')
