@@ -14,11 +14,11 @@ POST_FORMAT_STANDARD = 'standard'
 POST_FORMAT_STATUS = 'status'
 POST_FORMAT_VIDEO = 'video'
 
-POST_STATUS_PUBLISH = 'publish'
-POST_STATUS_FUTURE = 'future'
-POST_STATUS_DRAFT = 'draft'
-POST_STATUS_PENDING = 'pending'
-POST_STATUS_PRIVATE = 'private'
+STATUS_PUBLISH = 'publish'
+STATUS_FUTURE = 'future'
+STATUS_DRAFT = 'draft'
+STATUS_PENDING = 'pending'
+STATUS_PRIVATE = 'private'
 
 
 class WordPressAPI:
@@ -88,6 +88,43 @@ class WordPressAPI:
 
     def get_medias(self):
         return json.loads(self.api.get('/media'))
+
+    def _create_page_entity(self, **kwargs):
+        return {
+            'author': kwargs.get('author', None),
+            'content': kwargs.get('content', None),
+            'date': kwargs.get('date', None),
+            'date_gmt': kwargs.get('date_gmt', None),
+            'featured_media': kwargs.get('featured_media', None),
+            'menu_order': kwargs.get('menu_order', None),
+            'meta': kwargs.get('meta', None),
+            'parent': kwargs.get('parent', None),
+            'password': kwargs.get('password', None),
+            'slug': kwargs.get('slug', None),
+            'status': kwargs.get('status', None),
+            'template': kwargs.get('template', None),
+            'title': kwargs.get('title', None)
+        }
+
+    def create_page(self, **kwargs):
+        page = self._create_page_entity(**kwargs)
+        page = create_json_without_nulls(page)
+        return json.loads(self.api.post('/pages', json.dumps(page)))
+
+    def update_page(self, id, **kwargs):
+        page = self._create_page_entity(**kwargs)
+        page = create_json_without_nulls(page)
+        return json.loads(self.api.post('/pages/' + str(id),
+                          json.dumps(page)))
+
+    def delete_page(self, id):
+        return json.loads(self.api.delete('/pages/' + str(id)))
+
+    def get_page(self, id):
+        return json.loads(self.api.get('/pages/' + str(id)))
+
+    def get_pages(self):
+        return json.loads(self.api.get('/pages'))
 
     def _create_post_entity(self, **kwargs):
         return {

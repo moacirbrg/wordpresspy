@@ -16,6 +16,12 @@ WordPressPy is a Python library for automate management in WordPress installatio
     * [Delete media](#update-media)
     * [Get media](#get-media)
     * [Get medias](#get-medias)
+  * [Page](#page)
+    * [Create page](#create-page)
+    * [Update page](#update-page)
+    * [Delete page](#delete-page)
+    * [Get page](#get-page)
+    * [Get pages](#get-pages)
   * [Post](#post)
     * [Create post](#create-post)
     * [Update post](#update-post)
@@ -81,11 +87,11 @@ from wordpresspy.wordpress import CONSTANT_NAME1, CONSTANT_NAME2
 |POST_FORMAT_STANDARD   | 'standard'    |
 |POST_FORMAT_STATUS     | 'status'      |
 |POST_FORMAT_VIDEO      | 'video'       |
-|POST_STATUS_PUBLISH    | 'publish'     |
-|POST_STATUS_FUTURE     | 'future'      |
-|POST_STATUS_DRAFT      | 'draft'       |
-|POST_STATUS_PENDING    | 'pending'     |
-|POST_STATUS_PRIVATE    | 'private'     |
+|STATUS_PUBLISH         | 'publish'     |
+|STATUS_FUTURE          | 'future'      |
+|STATUS_DRAFT           | 'draft'       |
+|STATUS_PENDING         | 'pending'     |
+|STATUS_PRIVATE         | 'private'     |
 
 Besides the constants you can also include some functions to help you.
 ```python3
@@ -174,8 +180,7 @@ wpapi.create_media(
   res.read(),
   'a-name-for-image.extension',
   title='Media title',
-  caption='Media caption',
-  ...
+  caption='Media caption'
   )
 ```
 
@@ -185,8 +190,7 @@ media_id = 1
 wpapi.update_media(
   media_id,
   title='Media title',
-  caption='Media caption',
-  ...
+  caption='Media caption'
 )
 ```
 
@@ -213,6 +217,64 @@ print(medias)
 
 Returns a list of [Media Schema](#media).
 
+### Page
+The following methods helps you to manage pages.<br/>
+You can find details about fields of Page Schema on https://developer.wordpress.org/rest-api/reference/pages/#schema
+
+#### Create page
+```python3
+from wordpresspy.utils import str_to_slug
+from wordpresspy.wordpress import STATUS_PUBLISH
+
+...
+
+wpapi.create_page(
+  author=0,
+  content='Page full content',
+  date='2018-01-10 00:30:00',
+  featured_media=71,
+  menu_order=1,
+  parent=6,
+  password='123456',
+  slug=str_to_slug('An amazing slug of page title'),
+  status=STATUS_PUBLISH,
+  template='template-homepage.php',
+  title='An amazing page title'
+)
+```
+
+#### Update page
+```python3
+page_id = 105
+wpapi.update_page(
+  page_id,
+  content='New full content'
+)
+```
+
+#### Delete page
+```python3
+page_id = 105
+wpapi.delete_page(page_id)
+```
+
+#### Get page
+```python3
+page_id = 7
+page = wpapi.get_page(page_id)
+print(page)
+```
+
+Returns one [Page Schema](#page).
+
+#### Get pages
+```python3
+pages = wpapi.get_pages()
+print(pages)
+```
+
+Returns a list of [Page Schema](#page).
+
 ### Post
 The following methods helps you to manage posts.<br/>
 You can find details about fields of Post Schema on https://developer.wordpress.org/rest-api/reference/posts/#schema
@@ -220,6 +282,7 @@ You can find details about fields of Post Schema on https://developer.wordpress.
 #### Create post
 ```python3
 from wordpresspy.utils import str_to_slug
+from wordpresspy.wordpress import STATUS_PUBLISH
 
 ...
 
@@ -228,7 +291,7 @@ wpapi.create_post(
   content='My post full content',
   excerpt='My post description',
   slug=str_to_slug('My post Title'),
-  status=POST_STATUS_PUBLISH,
+  status=STATUS_PUBLISH,
   title='My post Title'
 )
 ```
@@ -245,8 +308,7 @@ post_id = 1
 wpapi.update_post(
   post_id,
   content='My post full content',
-  title='My post Title',
-  ...
+  title='My post Title'
 )
 ```
 
@@ -267,7 +329,7 @@ Returns one [Post Schema](#post).
 
 #### Get posts
 ```python3
-posts = wpapi.gete_posts()
+posts = wpapi.get_posts()
 print(posts)
 ```
 
