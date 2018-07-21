@@ -214,6 +214,10 @@ class WooCommerceAPI:
             'max_price': kwargs.get('max_price', None)
         }
 
+    def _create_entity(self, url, entity):
+        entity = create_json_without_nulls(entity)
+        return json.loads(self.api.post(url, json.dumps(entity)))
+
     def _update_entity(self, url, entity):
         entity = create_json_without_nulls(entity)
         return json.loads(self.api.put(url, json.dumps(entity)))
@@ -222,6 +226,10 @@ class WooCommerceAPI:
         query_params = self._create_products_query_params(**kwargs)
         query_params_without_nulls = create_json_without_nulls(query_params)
         return json.loads(self.api.get(url, query_params_without_nulls))
+
+    def create_product(self, **kwargs):
+        entity = self._create_product_entity(**kwargs)
+        return self._create_entity('/products', entity)
 
     def update_product(self, id, **kwargs):
         entity = self._create_product_entity(**kwargs)
