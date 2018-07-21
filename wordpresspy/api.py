@@ -65,7 +65,9 @@ class API:
             data = bytes(data, 'utf-8')
         return self._request(HTTP_DELETE, url, data)
 
-    def get(self, url):
+    def get(self, url, query_params=None):
+        if query_params is not None:
+            url = url + '?' + urllib.parse.urlencode(query_params)
         return self._request(HTTP_GET, url)
 
     def post(self, url, data):

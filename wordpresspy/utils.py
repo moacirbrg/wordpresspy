@@ -11,6 +11,15 @@ def create_json_without_nulls(json_obj):
     return final
 
 
+def get_property(obj, key, default):
+    if not isinstance(obj, dict):
+        return default
+    elif key not in obj:
+        return default
+    else:
+        return obj[key]
+
+
 def remove_special_chars(s):
     if not isinstance(s, string_types):
         return s
