@@ -37,14 +37,15 @@ class WooCommerceAPI:
         properties = []
         for item in items:
             if isinstance(item, dict):
-                properties.append({
+                fullprops = {
                     'id': get_property(item, 'id', None),
                     'name': get_property(item, 'name', None),
                     'position': get_property(item, 'position', None),
                     'visible': get_property(item, 'visible', None),
                     'variation': get_property(item, 'variation', None),
                     'options': get_property(item, 'options', None)
-                })
+                }
+                properties.append(create_json_without_nulls(fullprops))
         return properties
 
     def _create_product_categories(self, items):
@@ -107,13 +108,14 @@ class WooCommerceAPI:
         properties = []
         for item in items:
             if isinstance(item, dict):
-                properties.append({
+                fullprops = {
                     'id': get_property(item, 'id', None),
                     'src': get_property(item, 'src', None),
                     'name': get_property(item, 'name', None),
                     'alt': get_property(item, 'alt', None),
                     'position': get_property(item, 'position', None)
-                })
+                }
+                properties.append(create_json_without_nulls(fullprops))
         return properties
 
     def _create_product_meta_data(self, items):
