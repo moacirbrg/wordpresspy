@@ -15,8 +15,8 @@ PRODUCT_STATUS_PUBLISH = 'publish'
 
 PRODUCT_TYPE_SIMPLE = 'simple'
 PRODUCT_TYPE_GROUPED = 'grouped'
-PRODUCT_TYPE_external = 'external'
-PRODUCT_TYPE_variable = 'variable'
+PRODUCT_TYPE_EXTERNAL = 'external'
+PRODUCT_TYPE_VARIABLE = 'variable'
 
 TAX_STATUS_TAXABLE = 'taxable'
 TAX_STATUS_SHIPPING = 'shipping'
@@ -199,15 +199,17 @@ class WooCommerceAPI:
             'offset': kwargs.get('offset', None),
             'order': kwargs.get('order', None),
             'orderby': kwargs.get('orderby', None),
+            'parent': kwargs.get('parent', None),
             'parent_exclude': kwargs.get('parent_exclude', None),
             'slug': kwargs.get('slug', None),
+            'status': kwargs.get('status', None),
             'type': kwargs.get('type', None),
             'sku': kwargs.get('sku', None),
             'featured': kwargs.get('featured', None),
             'category': kwargs.get('category', None),
             'tag': kwargs.get('tag', None),
-            'attribute': kwargs.get('attribute', None),
             'shipping_class': kwargs.get('shipping_class', None),
+            'attribute': kwargs.get('attribute', None),
             'attribute_term': kwargs.get('attribute_term', None),
             'tax_class': kwargs.get('tax_class', None),
             'in_stock': kwargs.get('in_stock', None),
@@ -216,6 +218,45 @@ class WooCommerceAPI:
             'max_price': kwargs.get('max_price', None)
         }
 
+    def _create_product_variation_entity(self, **kwargs):
+        return {
+            'description': kwargs.get('description', None),
+            'sku': kwargs.get('sku', None),
+            'regular_price': kwargs.get('regular_price', None),
+            'sale_price': kwargs.get('sale_price', None),
+            'date_on_sale_from': kwargs.get('date_on_sale_from', None),
+            'date_on_sale_from_gmt': kwargs.get('date_on_sale_from_gmt', None),
+            'date_on_sale_to': kwargs.get('date_on_sale_to', None),
+            'date_on_sale_to_gmt': kwargs.get('date_on_sale_to_gmt', None),
+            'visible': kwargs.get('visible', None),
+            'virtual': kwargs.get('virtual', None),
+            'downloadable': kwargs.get('downloadable', None),
+            'downloads': self._create_product_downloads(
+                kwargs.get('downloads', None)),
+            'download_limit': kwargs.get('download_limit', None),
+            'download_expiry': kwargs.get('download_expiry', None),
+            'tax_status': kwargs.get('tax_status', None),
+            'tax_class': kwargs.get('tax_class', None),
+            'manage_stock': kwargs.get('manage_stock', None),
+            'stock_quantity': kwargs.get('stock_quantity', None),
+            'in_stock': kwargs.get('in_stock', None),
+            'backorders': kwargs.get('backorders', None),
+            'weight': kwargs.get('weight', None),
+            'dimensions': self._create_product_dimensions(
+                kwargs.get('dimensions', None)),
+            'shipping_class': kwargs.get('shipping_class', None),
+            'image': self._create_product_images(
+                kwargs.get('image', None)),
+            'attributes': self._create_product_attributes(
+                kwargs.get('attributes', None)),
+            'menu_order': kwargs.get('menu_order', None),
+            'meta_data': self._create_product_meta_data(
+                kwargs.get('meta_data', None)),
+        }
+
+    def _create_product_variations_query_params(self, **kwargs):
+        return _create_products_query_params(self, **kwargs)
+
     def _create_entity(self, url, entity):
         entity = create_json_without_nulls(entity)
         return json.loads(self.api.post(url, json.dumps(entity)))
@@ -223,6 +264,10 @@ class WooCommerceAPI:
     def _update_entity(self, url, entity):
         entity = create_json_without_nulls(entity)
         return json.loads(self.api.put(url, json.dumps(entity)))
+
+    def _delete_entity(self, url, force=False):
+        force_param = None if force is False else json.dumps({'force': True})
+        return json.loads(self.api.delete(url, force_param))
 
     def _get_entities(self, url, **kwargs):
         query_params = self._create_products_query_params(**kwargs)
@@ -242,3 +287,30 @@ class WooCommerceAPI:
 
     def get_products(self, **kwargs):
         return self._get_entities('/products', **kwargs)
+
+    def create_product_variation(self, product_id, **kwargs):
+        entity = self._create_product_entity(**kwargs)
+        return self._create_entity(
+            '/products/' + str(product_id) + '/variations', entity)
+
+    def update_product_variation(self, product_id, variation_id, **kwargs):
+        entity = self._create_product_entity(**kwargs)
+        return self._update_entity(
+            '/products/' + str(product_id) +
+            '/variations/' + str(variation_id),
+            entity)
+
+    def delete_product_variation(self, product_id, variation_id):
+        return self._delete_entity(
+            '/products/' + str(product_id) +
+            '/variations/' + str(variation_id),
+            True)
+
+    def get_product_variation(self, product_id, variation_id):
+        return self._get_entities(
+            '/products/' + str(product_id) +
+            '/variations/' + str(variation_id))
+
+    def get_product_variations(self, product_id, **kwargs):
+        return self._get_entities(
+            '/products/' + str(product_id) + '/variations', **kwargs)
